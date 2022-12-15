@@ -11,6 +11,7 @@ import { AddressService } from './services/address.service';
 import { PetService } from './services/pet.service';
 import { CreditCardService } from './services/credit-card.service';
 import { CreditCardController } from './controllers/credit-card.controller';
+import { Customer } from './models/customer.model';
 
 @Module({
     imports: [MongooseModule.forFeature([
@@ -24,7 +25,7 @@ import { CreditCardController } from './controllers/credit-card.controller';
         },
     ])],
     controllers: [
-        CustomerController, 
+        CustomerController,
         AddressController,
         CreditCardController,
         PetController
@@ -35,6 +36,9 @@ import { CreditCardController } from './controllers/credit-card.controller';
         AddressService,
         CreditCardService,
         PetService
+    ],
+    exports: [
+        CustomerService
     ]
 })
 export class BackofficeModule { }
