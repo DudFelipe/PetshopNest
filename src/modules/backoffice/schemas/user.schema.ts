@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
-    username:{
+    username: {
         type: String,
         require: true,
         trim: true,
@@ -19,4 +19,10 @@ export const UserSchema = new mongoose.Schema({
         required: true,
         default: true,
     },
+    roles: [{
+        type: String,
+        required: true,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }]
 });
