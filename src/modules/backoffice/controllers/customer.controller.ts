@@ -1,5 +1,6 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, CacheInterceptor, Controller, Get, HttpException, HttpStatus, Param, Post, UseInterceptors } from '@nestjs/common';
 import { Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { Md5 } from 'md5-typescript';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 import { CreateCustomerContract } from 'src/modules/backoffice/contracts/customer/create-customer.contract';
 import { CreateCustomerDto } from 'src/modules/backoffice/dtos/customer/create-customer.dto';
@@ -24,6 +25,7 @@ export class CustomerController
     }
 
     @Get()
+    @UseInterceptors(CacheInterceptor)
     async getAll()
     {
         const customers = await this.customerService.findAll();
@@ -43,7 +45,9 @@ export class CustomerController
     {
         try
         {
-            const user = await this.accountService.create(new User(model.document, model.password, true, ['user']));
+            const password = await Md5.init(`${model.password}${process.env.SALT_KEY}`);
+
+            const user = await this.accountService.create(new User(model.document, password, true, ['user']));
 
             const customer = new Customer(model.name, model.document, model.email, null, null, null, null, user);
             const res = await this.customerService.create(customer);

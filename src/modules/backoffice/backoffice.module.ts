@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose/dist';
 import { CustomerController } from 'src/modules/backoffice/controllers/customer.controller';
 import { AddressController } from './controllers/address.controller';
@@ -16,9 +16,12 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from 'src/shared/services/auth.service';
 import { JwtStrategy } from 'src/shared/strategies/jwt.strategy';
 import { AccountController } from './controllers/account.controller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     imports: [
+        HttpModule,
+        CacheModule.register(),
         PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
             secretOrPrivateKey: '83ab2e0802f3',
